@@ -2,23 +2,29 @@ const express = require('express');
 
 const router = express.Router();
 
-const { User } = require('../models/user');
+const { User } = require('../models');
 const userSchema = require('../validations/userPostValidation');
 
-router.post('/user', (req, res) => {
+const token = require('../validations/jwt');
+
+router.post('/', async (req, res) => {
   try {
     const { displayName, email, password, image } = req.body;
     const validation = userSchema.validate({ displayName, email, password, image });
 
-    if (validation.error) return res.status(400).json(validation.error);
+    if (validation.error) res.status(400).json({ message: validation.error.details[0].message });
 
-    const userExists = User.findOne({ where: { email } });
+    const userExists = await User.findAll({ where: { email } });
 
-    if (userExists) return res.status(400).json({ message: 'User already registered' });
+    if (userExists.length > 0) return res.status(400).json({ message: 'User already registered' });
 
-    const newUser = User.create({ displayName, email, password, image });
+    const newUser = { displayName, email, password, image };
 
-    res.status(201).json(newUser);
+    await User.create(newUser);
+
+    const tokenJwt = token(newUser);
+
+    res.status(201).json({ token: tokenJwt });
   } catch (error) {
     console.error(error.message);
     return res.status(500).end();
