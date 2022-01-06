@@ -8,8 +8,8 @@ const userSchema = Joi.object({
     .required(),
   password: Joi.string()
     .min(6)
-    .max(6)
-    .required(),
+    .required()
+    .messages({ 'string.min': '"password" length must be 6 characters long' }),
   image: Joi.string(),
 });
 

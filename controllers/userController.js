@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 
     const userExists = await User.findAll({ where: { email } });
 
-    if (userExists.length > 0) return res.status(400).json({ message: 'User already registered' });
+    if (userExists.length > 0) return res.status(409).json({ message: 'User already registered' });
 
     const newUser = { displayName, email, password, image };
 
