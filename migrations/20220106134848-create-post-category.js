@@ -11,10 +11,16 @@ module.exports = {
       postId: {
         type: Sequelize.INTEGER,
         foreignKey: true,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        // references: { model: 'BlogPosts', id: 'id' }
       },
       categoryId: {
         type: Sequelize.INTEGER,
         foreignKey: true,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        // references: { model: 'Categories', id: 'id' }
       },
     });
   },

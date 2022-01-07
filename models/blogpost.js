@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  // BlogPost.associate = (models) => {
-  //   BlogPost.belongsTo(models.User, { foreignKey: 'id', as: 'posts' });
-  //   BlogPost.hasOne(models.PostCategory, { foreignKey: 'postId', as: 'post_category' });
-  // };
+  BlogPost.associate = (models) => {
+    BlogPost.belongsTo(models.User, { foreignKey: 'id', as: 'posts' });
+    BlogPost.hasOne(models.PostCategory, { foreignKey: 'postId', as: 'post_category' });
+  };
 
   return BlogPost;
 };

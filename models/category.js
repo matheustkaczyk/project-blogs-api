@@ -9,12 +9,12 @@ module.exports = (sequelize, DataTypes) => {
   timestamps: false,
 });
 
-  // Category.associate = (models) => {
-  //   Category.hasMany(models.PostCategory, {
-  //     foreignKey: 'categoryId',
-  //     through: 'category'
-  //   });
-  // };
+  Category.associate = (models) => {
+    Category.belongsToMany(models.PostCategory, {
+      foreignKey: 'categoryId',
+      through: 'category',
+    });
+  };
   
   return Category;
 };
