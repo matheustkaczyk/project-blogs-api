@@ -34,4 +34,18 @@ router.post('/categories', async (req, res) => {
   }
 });
 
+router.get('/categories', async (req, res) => {
+  const { authorization } = req.headers;
+
+  if (!authorization) return res.status(401).json({ message: 'Token not found' });
+
+  const val = tokenValidation(authorization);
+
+  if (val.message) return res.status(401).json({ message: 'Expired or invalid token' });
+
+  const categories = await Category.findAll();
+
+  return res.status(200).json(categories);
+});
+
 module.exports = router;
