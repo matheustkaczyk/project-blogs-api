@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const jwtConfig = {
   expiresIn: 300,
@@ -6,4 +7,13 @@ const jwtConfig = {
 
 const token = (newUser) => jwt.sign(newUser, process.env.JWT_SECRET, jwtConfig);
 
-module.exports = token;
+const tokenValidation = (tokenValue) => {
+  try {
+    const validation = jwt.verify(tokenValue, process.env.JWT_SECRET);
+    return validation;
+  } catch (error) {
+    return error;
+  }
+};
+
+module.exports = { token, tokenValidation };
