@@ -7,7 +7,7 @@ const PORT = 3000 || process.env.PORT;
 const app = express();
 app.use(express.json());
 
-app.use('/user', userController);
+app.use('/', userController);
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 

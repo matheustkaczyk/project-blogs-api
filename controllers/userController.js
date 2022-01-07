@@ -8,7 +8,7 @@ const userLoginSchema = require('../validations/userLoginValidation');
 
 const token = require('../validations/jwt');
 
-router.post('/', async (req, res) => {
+router.post('/user', async (req, res) => {
   try {
     const { displayName, email, password, image } = req.body;
     const validation = userCreateSchema.validate({ displayName, email, password, image });
@@ -41,13 +41,13 @@ router.post('/login', async (req, res) => {
 
     const userExists = await User.findAll({ where: { email } });
 
-    if (userExists.length <= 0) return res.status(400).json({ message: 'User not found' });
+    if (userExists.length <= 0) res.status(400).json({ message: 'Invalid fields' });
 
     const user = { ...userExists[0].dataValues };
 
     const tokenJwt = token(user);
 
-    res.status(200).json({ token: tokenJwt });
+    return res.status(200).json({ token: tokenJwt });
   } catch (error) {
     console.error(error.message);
     return res.status(500).end();
