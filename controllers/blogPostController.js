@@ -4,7 +4,7 @@ const { tokenValidation } = require('../validations/jwt');
 
 const blogPostValidation = require('../validations/blogPostValidation');
 
-const { BlogPost, Category, User } = require('../models');
+const { BlogPost, Category, User, PostCategory } = require('../models');
 
 const router = express.Router();
 
@@ -42,7 +42,7 @@ router.get('/post', async (req, res) => {
     if (val.message) return res.status(401).json({ message: 'Expired or invalid token' });
   
     const getAll = await BlogPost.findAll(
-      { include: [{ model: User, as: 'user' }] },
+      { include: [{ model: User, as: 'user' }, { model: PostCategory, as: 'categories' }] },
     );
   
     return res.status(200).json(getAll);
