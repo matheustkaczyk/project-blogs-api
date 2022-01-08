@@ -4,7 +4,7 @@ const { tokenValidation } = require('../validations/jwt');
 
 const blogPostValidation = require('../validations/blogPostValidation');
 
-const { BlogPost, Category } = require('../models');
+const { BlogPost, Category, User } = require('../models');
 
 const router = express.Router();
 
@@ -29,6 +29,27 @@ router.post('/post', async (req, res) => {
   const categories = await BlogPost.create({ title, content, categoryIds, userId: val.id });
 
   return res.status(201).json(categories);
+});
+
+router.get('/post', async (req, res) => {
+  try {
+    const { authorization } = req.headers;
+  
+    if (!authorization) return res.status(401).json({ message: 'Token not found' });
+  
+    const val = tokenValidation(authorization);
+  
+    if (val.message) return res.status(401).json({ message: 'Expired or invalid token' });
+  
+    const getAll = await BlogPost.findAll(
+      { include: [{ model: User, as: 'user' }] },
+    );
+  
+    return res.status(200).json(getAll);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).end();
+  }
 });
 
 module.exports = router;
