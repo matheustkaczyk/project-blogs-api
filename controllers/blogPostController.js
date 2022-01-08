@@ -42,7 +42,7 @@ router.get('/post', async (req, res) => {
     if (val.message) return res.status(401).json({ message: 'Expired or invalid token' });
   
     const getAll = await BlogPost.findAll(
-      { include: [{ model: User, as: 'user' }, { model: PostCategory, as: 'categories' }] },
+      { include: [{ model: User, as: 'user' }] },
     );
   
     return res.status(200).json(getAll);

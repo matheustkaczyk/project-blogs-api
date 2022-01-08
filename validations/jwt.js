@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const jwtConfig = {
-  expiresIn: 300,
+  expiresIn: 900,
 };
 
 const token = (newUser) => jwt.sign(newUser, process.env.JWT_SECRET, jwtConfig);
