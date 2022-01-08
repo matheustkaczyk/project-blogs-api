@@ -4,7 +4,7 @@ const { tokenValidation } = require('../validations/jwt');
 
 const blogPostValidation = require('../validations/blogPostValidation');
 
-const { BlogPost, Category, User, PostCategory } = require('../models');
+const { BlogPost, Category, User } = require('../models');
 
 const router = express.Router();
 
