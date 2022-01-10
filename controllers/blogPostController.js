@@ -28,6 +28,8 @@ router.post('/post', async (req, res) => {
 
   const categories = await BlogPost.create({ title, content, categoryIds, userId: val.id });
 
+  // const postCategoryCreate = await PostCategory.bulkCreate(categoryIds);
+
   return res.status(201).json(categories);
 });
 
@@ -42,7 +44,10 @@ router.get('/post', async (req, res) => {
     if (val.message) return res.status(401).json({ message: 'Expired or invalid token' });
   
     const getAll = await BlogPost.findAll(
-      { include: [{ model: User, as: 'user' }] },
+      { 
+        include: [{ model: User, as: 'user' },
+        { model: Category, as: 'categories', through: { attributes: [] } }],
+      },
     );
   
     return res.status(200).json(getAll);
