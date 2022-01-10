@@ -45,8 +45,10 @@ router.get('/post', async (req, res) => {
   
     const getAll = await BlogPost.findAll(
       { 
-        include: [{ model: User, as: 'user' },
-        { model: Category, as: 'categories', through: { attributes: [] } }],
+        include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+        ],
       },
     );
   
