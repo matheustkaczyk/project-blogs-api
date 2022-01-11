@@ -1,8 +1,8 @@
 const express = require('express');
 
-const userController = require('./controllers/userController');
-const categoriesController = require('./controllers/categoriesController');
-const blogPostController = require('./controllers/blogPostController');
+const userController = require('./src/controllers/userController');
+const categoriesController = require('./src/controllers/categoriesController');
+const blogPostController = require('./src/controllers/blogPostController');
 
 const PORT = 3000 || process.env.PORT;
 

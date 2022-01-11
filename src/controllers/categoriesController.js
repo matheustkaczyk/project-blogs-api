@@ -4,20 +4,13 @@ const router = express.Router();
 
 const { Category } = require('../models');
 
-const { tokenValidation } = require('../validations/jwt');
+const jwtValidation = require('../middlewares/jwtValidation');
 
 const categoriesValidation = require('../validations/categoriesValidation');
 
-router.post('/categories', async (req, res) => {
+router.post('/categories', jwtValidation, async (req, res) => {
   try {
     const { name } = req.body;
-    const { authorization } = req.headers;
-
-    if (!authorization) return res.status(401).json({ message: 'Token not found' });
-
-    const tokenVal = tokenValidation(authorization);
-
-    if (tokenVal.message) return res.status(401).json({ message: 'Expired or invalid token' });
 
     const val = categoriesValidation.validate({ name });
 
@@ -34,15 +27,7 @@ router.post('/categories', async (req, res) => {
   }
 });
 
-router.get('/categories', async (req, res) => {
-  const { authorization } = req.headers;
-
-  if (!authorization) return res.status(401).json({ message: 'Token not found' });
-
-  const val = tokenValidation(authorization);
-
-  if (val.message) return res.status(401).json({ message: 'Expired or invalid token' });
-
+router.get('/categories', jwtValidation, async (req, res) => {
   const categories = await Category.findAll();
 
   return res.status(200).json(categories);

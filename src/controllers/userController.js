@@ -6,7 +6,9 @@ const { User } = require('../models');
 const userCreateSchema = require('../validations/userPostValidation');
 const userLoginSchema = require('../validations/userLoginValidation');
 
-const { token, tokenValidation } = require('../validations/jwt');
+const { token } = require('../validations/jwt');
+
+const jwtValidation = require('../middlewares/jwtValidation');
 
 router.post('/user', async (req, res) => {
   try {
@@ -56,16 +58,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/user', async (req, res) => {
+router.get('/user', jwtValidation, async (req, res) => {
   try {
-    const { authorization } = req.headers;
-
-    if (!authorization) res.status(401).json({ message: 'Token not found' });
-    
-    const validation = await tokenValidation(authorization);
-
-    if (validation.message) res.status(401).json({ message: 'Expired or invalid token' });
-
     const users = await User.findAll();
 
     if (users.length <= 0) res.status(400).json({ message: 'No user found' });
@@ -77,16 +71,9 @@ router.get('/user', async (req, res) => {
   }
 });
 
-router.get('/user/:id', async (req, res) => {
+router.get('/user/:id', jwtValidation, async (req, res) => {
   try {
-    const { authorization } = req.headers;
     const { id } = req.params;
-
-    if (!authorization) res.status(401).json({ message: 'Token not found' });
-    
-    const validation = await tokenValidation(authorization);
-
-    if (validation.message) res.status(401).json({ message: 'Expired or invalid token' });
 
     const user = await User.findOne({ where: { id } });
 
