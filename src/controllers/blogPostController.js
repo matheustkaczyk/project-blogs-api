@@ -43,23 +43,26 @@ router.get('/post', jwtValidation, async (req, res) => {
   }
 });
 
-// router.get('/post/:id', async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const getAll = await BlogPost.findAll(
-//       { 
-//         include: [
-//         { model: User, as: 'user', attributes: { exclude: ['password'] } },
-//         { model: Category, as: 'categories', through: { attributes: [] } },
-//         ],
-//       },
-//     );
+router.get('/post/:id', jwtValidation, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const getOne = await BlogPost.findByPk(
+      id,
+      { 
+        include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+        ],
+      },
+    );
+
+    if (!getOne) res.status(404).json({ message: 'Post does not exist' });
   
-//     return res.status(200).json(getAll);
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).end();
-//   }
-// });
+    return res.status(200).json(getOne.dataValues);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).end();
+  }
+});
 
 module.exports = router;
