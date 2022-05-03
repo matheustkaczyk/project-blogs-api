@@ -9,8 +9,6 @@ module.exports = (req, res, next) => {
 
     const validation = jwt.verify(authorization, process.env.JWT_SECRET);
 
-    if (validation.message) return res.status(401).json({ message: 'Expired or invalid token' });
-
     if (validation.id) req.body.userId = validation.id;
   
     next();
